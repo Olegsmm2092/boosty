@@ -1,3 +1,4 @@
+from typing import List
 from fastapi import FastAPI
 import uvicorn
 from core.db import Database
@@ -25,7 +26,7 @@ async def about():
     return {"message": "About page"}
 
 
-@app.get("/tickets")
+@app.get("/tickets", response_model=List[TicketModel])
 def tickets(status:str=None, title:str=None): # type: ignore
     # pattern like a fabric
     tickets = db.get_tickets()
@@ -38,7 +39,7 @@ def tickets(status:str=None, title:str=None): # type: ignore
 
     return tickets
 
-@app.get("/tickets/{id}")
+@app.get("/tickets/{id}", response_model=TicketModel)
 def ticket(id:int):
     return db.get_one_ticket(id)
 
