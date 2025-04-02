@@ -1,0 +1,7 @@
+app/core/db.json
+app/core/db1.py
+app/data
+.vscode/
+app/crud
+app/schemas/new_one.py
+app/models/new_one.py
