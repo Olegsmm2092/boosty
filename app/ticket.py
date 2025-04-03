@@ -2,7 +2,7 @@ from typing import List
 from fastapi import FastAPI
 import uvicorn
 from core.db import Database
-from models.ticket import TicketModel
+from models.ticket import TicketModel, Ticket
 
 
 # import setting of project via config.py.
@@ -28,30 +28,16 @@ async def about():
 
 @app.get("/tickets", response_model=List[TicketModel])
 def tickets(status:str=None, title:str=None): # type: ignore
-    # pattern like a fabric
-    tickets = db.get_tickets()
-    # we're can to go move by all json
-    if status != None:
-        tickets = [ticket for ticket in tickets if ticket.status.lower() == status.lower()]
-
-    if title != None:
-        tickets = [ticket for ticket in tickets if ticket.title == title]
-
-    return tickets
+    return db.get_tickets(status, title) # type: ignore
+   
 
 @app.get("/tickets/{id}", response_model=TicketModel)
 def ticket(id:int):
     return db.get_one_ticket(id)
 
-@app.put("/ticket")
+@app.put("/ticket", response_model=Ticket)
 def ticketput(item:TicketModel):
-    # tools -- to apply `id`
-    items = db.get_tickets()
-    # обращаемся к последнему элементу и добавляем += 1
-    # и проставляем дефолтное значение для колонки с `id`
-    item.id = items[len(items) - 1].id + 1 # counter
-    db.append(item)
-    return item
+    return db.append(item)
 
 @app.patch("/ticket")
 def ticketpatch(item:TicketModel): # inside model has id can usage them
