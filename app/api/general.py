@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 
-general_router = APIRouter()
+general_router = APIRouter(prefix='/general')
 
 @general_router.get("/")
 async def home():
