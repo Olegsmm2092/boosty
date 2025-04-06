@@ -1,7 +1,7 @@
 from typing import List
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 import uvicorn
-from core.db import Database
+from core.db import Database, JsonDatabase
 from models.ticket import TicketModel, Ticket
 
 
@@ -26,7 +26,7 @@ async def about():
     return {"message": "About page"}
 
 
-@app.get("/tickets", response_model=List[TicketModel])
+@app.get("/tickets/", response_model=List[TicketModel])
 def tickets(status:str=None, title:str=None): # type: ignore
     return db.get_tickets(status, title) # type: ignore
    
@@ -39,17 +39,14 @@ def ticket(id:int):
 def ticketput(item:TicketModel):
     return db.append(item)
 
-@app.patch("/ticket")
+@app.patch("/ticket", response_model=TicketModel)
 def ticketpatch(item:TicketModel): # inside model has id can usage them
     # whats to do
-    results = [ticket for ticket in db.get_tickets() if ticket.id == item.id] # fetchone
-    if results:
-        results[0].title = item.title
-        results[0].status = item.status
-        results[0].type = item.type
-        # whats to do after apply modification
-        db.save_database()
-    return item
+    result = db.update(item) # type: ignore
+    if result:
+        return result
+    else:
+        raise HTTPException(status_code=404, detail=f"{item.id} not found")
 
 @app.delete("/ticket/{id}")
 def ticketdel(id:int): # type: ignore

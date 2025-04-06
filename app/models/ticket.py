@@ -2,6 +2,7 @@ from sqlalchemy import table
 from sqlmodel import SQLModel, Field
 from enum import Enum
 
+
 class BugType(str, Enum):
     Bug = 'Bug'
     Story = 'Story'
@@ -13,7 +14,7 @@ class StatusType(str, Enum):
     InProgress = 'In progress'
 
 class TicketModel(SQLModel):
-    # id: int
+    id: int|None = None
     title: str|None = Field(max_length=30, default=None, alias='Title')
     status: StatusType = StatusType.Draft
     type: BugType = BugType.Bug

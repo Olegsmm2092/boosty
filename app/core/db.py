@@ -3,6 +3,7 @@ from fastapi import HTTPException
 from sqlmodel import SQLModel, Session, create_engine, select
 from models.ticket import TicketModel, Ticket
 
+
 class JsonDatabase:
 
     _tickets = []
@@ -32,6 +33,13 @@ class JsonDatabase:
         return tickets
     
 
+    def get_ticket(self, id:int):
+        results = [ticket for ticket in self.get_tickets() if ticket.id == id]
+        if results:
+            return results[0]
+        return None
+
+
     def get_one_ticket(self, id:int):
         try:
             _id = [ticket for ticket in self.get_tickets() if ticket.id == id]
@@ -51,7 +59,20 @@ class JsonDatabase:
         item.id = items[len(items) - 1].id + 1 # type: ignore # counter
         self._tickets.append(item)
         self.save_database()
+        return item
     
+
+    def update(self, item: TicketModel):
+        results = [ticket for ticket in self.get_tickets() if ticket.id == item.id] # type: ignore # fetchone
+        if results:
+            # whats to do after apply modification
+            results[0].title = item.title
+            results[0].status = item.status
+            results[0].type = item.type
+            results[0].severity = item.severity
+            self.save_database()
+        return item
+
 
     def delete(self, id:int):
         results = self.get_one_ticket(id)
@@ -87,6 +108,11 @@ class Database:
 
             return session.exec(query).all()
     
+    
+    def get_ticket(self, id:int):
+        with Session(self.engine) as session:
+            return session.get(Ticket, id)
+
 
     def get_one_ticket(self, id:int):
         try:
@@ -108,10 +134,23 @@ class Database:
         return ticket
     
 
+    def update(self, item: TicketModel):
+        with Session(self.engine) as session:
+            ticket = session.get(Ticket, item.id)
+            if ticket:
+                ticket.title = item.title
+                ticket.status = item.status
+                ticket.type = item.type
+                ticket.severity = item.severity
+                session.commit()
+                return ticket
+
+
     def delete(self, id:int):
-        results = self.get_one_ticket(id)
-        if results:
-            self._tickets.remove(results) # type: ignore
-            self.save_database()
-            return results # type: ignore
-        return results
+        with Session(self.engine) as session:
+            ticket = session.get(Ticket, id)
+            if ticket:
+                session.delete(ticket)
+                session.commit()
+                return ticket
+        return None

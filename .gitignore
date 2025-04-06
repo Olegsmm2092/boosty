@@ -6,3 +6,4 @@ app/crud
 app/schemas/new_one.py
 app/models/new_one.py
 ticket.db
+.env
