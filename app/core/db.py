@@ -7,7 +7,7 @@ from models.ticket import TicketModel, Ticket
 class JsonDatabase:
 
     _tickets = []
-    _filename = "app/core/db.json"
+    _filename = "app/db/db.json"
 
 
     def load_database(self):
@@ -87,7 +87,7 @@ class Database:
     _tickets = []
     def load_database(self):
         self.engine = create_engine(
-            "sqlite:///ticket.db",
+            "sqlite:///app/db/ticket.db",
             connect_args={"check_same_thread": False}
         )
         SQLModel.metadata.create_all(self.engine)

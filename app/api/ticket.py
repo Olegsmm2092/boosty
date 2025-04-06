@@ -28,9 +28,11 @@ def tickets(status:str=None, title:str=None): # type: ignore
 def ticket(id:int):
     return db.get_one_ticket(id)
 
+
 @ticket_router.put("/ticket", response_model=Ticket)
 def ticketput(item:TicketModel):
     return db.append(item)
+
 
 @ticket_router.patch("/ticket", response_model=TicketModel)
 def ticketpatch(item:TicketModel): # inside model has id can usage them
@@ -40,6 +42,7 @@ def ticketpatch(item:TicketModel): # inside model has id can usage them
         return result
     else:
         raise HTTPException(status_code=404, detail=f"{item.id} not found")
+
 
 @ticket_router.delete("/ticket/{id}")
 def ticketdel(id:int): # type: ignore

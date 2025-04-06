@@ -5,8 +5,8 @@ import uvicorn
 
 
 app = FastAPI(title="Service of Tickets")
-app.include_router(ticket_router)
-app.include_router(general_router)
+app.include_router(ticket_router, prefix='/api')
+app.include_router(general_router, prefix='/api')
 
 
 
