@@ -1,0 +1,9 @@
+[
+    {
+        "id": 1,
+        "title": "Implement tickets view page",
+        "status": "In progress"
+    },
+    {"id": 2, "title": "Implement ticket edit page", "status": "Draft"},
+    {"id": 3, "title": "Implement creating tickets"}
+]
