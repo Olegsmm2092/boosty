@@ -1,12 +1,12 @@
 from fastapi import FastAPI
-from api.ticket import ticket_router
-from api.general import general_router
+from api import ticket_router, general_router, http_router
 import uvicorn
 
 
 app = FastAPI(title="Service of Tickets")
 app.include_router(ticket_router, prefix='/api')
 app.include_router(general_router, prefix='/api')
+app.include_router(http_router, prefix='/api')
 
 
 
