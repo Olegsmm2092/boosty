@@ -1,13 +1,14 @@
 import React from "react";
-
+import { NavLink } from "react-router-dom";
 
 export function Header (props) {
+    const activeStyle = { color: '#c77979' }
+    const devider = " | "
     return (
-        <div>
-            <h2 style={{ color: 'rgb(255, 89, 89)' }}>{ props.logo }</h2>
-            <p>{ props.data }</p>
-            <a href="/">Home</a>
-        </div>
+        <nav>
+            <NavLink to="/" exact activeStyle={activeStyle}>Главная </NavLink> {devider}
+            <NavLink to="/about" activeStyle={activeStyle}> О сайте</NavLink>
+        </nav>
     
     );
 }
