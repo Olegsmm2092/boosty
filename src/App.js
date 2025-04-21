@@ -3,18 +3,21 @@ import './App.css';
 import HomePage from './components/home/HomePage';
 import AboutPage from './components/about/AboutPage';
 import { Header, Footer } from './components/widjet/Header';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
+function NotFound() {
+  return (<h1>Not Found</h1>);
+}
 
 function App() {
   return (
     <div className="App">
       <Header logo="Это мой сайт" data='This is HomePage' />
-      <Switch>
-        <Route path="/" exact component={HomePage} />
-        <Route path="/about" component={AboutPage} />
-        <HomePage />
-      </Switch>
+      <Routes>
+        <Route path="/" element={<HomePage/>} />
+        <Route path="/about" element={<AboutPage/>} />
+        <Route path="*" element={<NotFound/>} />
+      </Routes>
       <Footer />
     </div>
   );
